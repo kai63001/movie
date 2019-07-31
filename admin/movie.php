@@ -189,7 +189,7 @@
                                         <input type="text" name="v_trailer" class="form-control" value="<?= $youtube;?>" required>
                                     </div>
                                     <div class="col-md-6">
-                                        ความยาวของหนัง :
+                                        ความยาวของหนัง (นาที) :
                                         <input type="text" name="v_runtime" class="form-control" value="<?=$response['runtime'];?>">
                                     </div>
                                 </div>
@@ -334,10 +334,189 @@
                             </div>
                         <?php
 
+                    }elseif($ai == "addbyname"){
+                        $name = mysqli_real_escape_string($condb,$_GET['name']);
+                        $bracket = $name;
+                        $bracket_start = strpos($name,'(');
+                        $bracket = substr($bracket,$bracket_start);
+                        $bracket_stop = strpos($name,')');
+                        $bracket = substr($bracket,0,$bracket_stop);
+
+                        $name = str_replace($bracket,'',$name);
+
+                        $find_name = str_replace(' ','+',$name);
+                        $find_movie = file_get_contents('https://www.themoviedb.org/search?query='.$find_name.'&language=th-TH');
+
+                        $start = strpos($find_movie,'class="title result" href="/movie/');
+                        $find_movie = substr($find_movie,$start);
+                        $find_movie = str_replace('class="title result" href="/movie/','',$find_movie);
+                        $stop = strpos($find_movie,'?');
+                        $find_movie = substr($find_movie,0,$stop);
+
+                        $stack_url = 'https://api.themoviedb.org/3/movie/'.$find_movie.'?api_key=88fbbabf16279d44af3e9ede3f07b357&language=TH-th';
+
+                        $string  = curl_init($stack_url);
+
+                        curl_setopt($string, CURLOPT_ENCODING, 'gzip');  
+                        curl_setopt($string, CURLOPT_RETURNTRANSFER, 1 );
+
+                        $result   = curl_exec($string );
+                        
+                        curl_close($string );
+
+                        $response = json_decode($result, true);
+
+                        $urk = 'http://www.omdbapi.com/?i='.$response['imdb_id'].'&apikey=fe30fffa';
+
+                        $cur  = curl_init($urk);
+
+                        curl_setopt($cur, CURLOPT_ENCODING, 'gzip');  
+                        curl_setopt($cur, CURLOPT_RETURNTRANSFER, 1 );
+
+                        $rs   = curl_exec($cur );
+                        
+                        curl_close($cur );
+
+                        $dump = json_decode($rs, true);
+                        // search YT
+                        $title = $response['original_title'].' '.$response['title']. ' '.'Official Trailer';
+                        
+                        $title = str_replace(' ','+',$title);
+                        $title = str_replace('&','+',$title);
+
+                        $youtube = file_get_contents('https://www.youtube.com/results?search_query='.$title);
+
+                        $start = strpos($youtube,'data-context-item-id="');
+                        $youtube = substr($youtube,$start);
+                        $youtube = str_replace('data-context-item-id="','',$youtube);
+                        $stop = strpos($youtube,'"');
+                        $youtube = substr($youtube,0,$stop);
+
+                        //
+
+                        $addmovie = mysqli_real_escape_string($condb,$_POST['addmovie']);
+                        $v_name = mysqli_real_escape_string($condb,$_POST['v_name']);
+                        $v_detail = mysqli_real_escape_string($condb,$_POST['v_detail']);
+                        $v_img = mysqli_real_escape_string($condb,$_POST['v_img']);
+                        $v_imdb = mysqli_real_escape_string($condb,$_POST['v_imdb']);
+                        $v_tags = mysqli_real_escape_string($condb,$_POST['v_tags']);
+                        $v_trailer = mysqli_real_escape_string($condb,$_POST['v_trailer']);
+                        $v_runtime = mysqli_real_escape_string($condb,$_POST['v_runtime']);
+                        $v_type = mysqli_real_escape_string($condb,$_POST['v_type']);
+                        if($addmovie){
+                            $insert_movie = "INSERT INTO video (
+                                v_name,
+                                v_oname,
+                                v_detail,
+                                v_img,
+                                v_movie,
+                                v_imdb,
+                                v_tags,
+                                v_view,
+                                v_trailer,
+                                v_runtime,
+                                v_type,
+                                v_date
+                            ) VALUES (
+                                '$v_name',
+                                '$oname',
+                                '$v_detail',
+                                '$v_img',
+                                '1',
+                                '$v_imdb',
+                                '$v_tags',
+                                '1',
+                                '$v_trailer',
+                                '$v_runtime',
+                                '$v_type',
+                                NOW()
+                            )";
+                            $quert_movie = mysqli_query($condb,$insert_movie);
+                            $last_id = mysqli_insert_id($condb);
+                            if($quert_movie){
+                                header('location:movie.php?ai=addmovie&id='.$last_id);
+                            }else{
+                                echo "error";
+                                echo mysqli_error($condb);
+
+                            }
+                        }
+                        ?>
+                            <form action="" method="POST">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        ชื่อเรื่อง :
+                                        <input type="text" name="v_name" class="form-control" value="<?=$response['original_title'];?> (<?=$dump['Year'];?>) <?=$response['title'];?>" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        ประเภท :
+                                        <select name="v_type" id="" class="form-control">
+                                            <option value="พากย์ไทย">พากย์ไทย</option>
+                                            <option value="ซับไทย">ซับไทย</option>
+                                            <option value="เสียงโรง">เสียงโรง</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                เรื่องย่อ :
+                                <textarea name="v_detail" id="" name="v_detail" cols="10" rows="5" class="form-control"><?=$response['overview'];?></textarea>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        รูปปก :
+                                        <input type="text" name="v_img" class="form-control" value="https://image.tmdb.org/t/p/w600_and_h900_bestv2<?=$response['poster_path'];?>">
+                                    </div>
+                                    <div class="col-md-4">
+                                        คะแนน IMDb :
+                                        <input type="text" name="v_imdb" class="form-control" value="<?=$dump['imdbRating'];?>">
+                                    </div>
+                                    <div class="col-md-4">
+                                        แท็ก :
+                                        <input type="text" name="v_tags" class="form-control" value="<?php
+                                                $count = count($response['genres']);
+                                                $count -= 1;
+                                                for($i=0;$i<=$count;$i++){
+                                                    $ttg .= $response['genres'][$i]['name'].",";
+                                                    
+                                                }
+                                                $countttg = strlen($ttg)-1;
+                                                $ttg = substr($ttg,0,$countttg);
+                                                echo $ttg;
+                                            ?>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <a href="https://www.youtube.com/watch?v=<?= $youtube;?>" target="_blank">ตัวอย่าง</a> หนัง : 
+                                        <input type="text" name="v_trailer" class="form-control" value="<?= $youtube;?>" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        ความยาวของหนัง (นาที) :
+                                        <input type="text" name="v_runtime" class="form-control" value="<?=$response['runtime'];?>">
+                                    </div>
+                                </div>
+                                <br>
+                                <input type="submit" name="addmovie" class="btn btn-success" value="ADD MOVIE..">
+                            </form>
+                        <?php
+                        
                     }else{
                         
                         ?>
                             <div class="row">
+                                <div class="col-md-6">
+                                    <div class="box" style="padding:15px;background:white;color:#363636;border-radius:3px;">
+                                        Name Movie :
+                                        <br><br>
+                                        <input type="text" class="form-control" name="name" id="name" placeholder="Ex. ROBIN HOOD (2018) พยัคฆ์ร้ายโรบินฮู้ด">
+                                        <br>
+                                        <button id="namemovie" class="btn btn-primary"> Search.. </button>
+                                        <script>
+                                            $('#namemovie').click(function(){
+                                                namemovie = $('#name').val();
+                                                window.location.assign('movie.php?ai=addbyname&name='+namemovie);
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
                                 <div class="col-md-6">
                                     <div class="box" style="padding:15px;background:white;color:#363636;border-radius:3px;">
                                         <a href="https://www.themoviedb.org/movie">> TMD_ID :</a>
