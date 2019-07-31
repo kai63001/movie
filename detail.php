@@ -5,6 +5,10 @@
     $v_id = mysqli_real_escape_string($condb,$_GET['v_id']);
     $row_detail = mysqli_fetch_array(mysqli_query($condb,"SELECT * FROM video WHERE v_id = '$v_id'"));
 
+    $view = $row_detail['v_view'];
+    $view += 1;
+
+    $updateview = mysqli_query($condb,"UPDATE video SET v_view = '$view' WHERE v_id = '$v_id'");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,9 +40,6 @@
             text-overflow: ellipsis;
         }
         .imdb {
-            position: absolute;
-            top: 5px;
-            left: 25px;
             background: #4a4a4a;
             padding-left:5px;
             padding-right:5px;
@@ -72,6 +73,13 @@
     <div class="content">
         <div class="row">
             <div class="col-md-9">
+                <nav aria-label="breadcrumb" style="background:#383838;border-radius:3px;">
+                    <ol class="breadcrumb" style="background:#383838;border-radius:3px;">
+                        <li class="breadcrumb-item"><a href="#" style="text-decoration:none;color:white;">หน้าแรก</a></li>
+                        <li class="breadcrumb-item"><a href="#" style="text-decoration:none;color:white;">หนัง</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><?= $row_detail['v_name'];?></li>
+                    </ol>
+                </nav>
                 <div class="row">
                     <div class="col-md-4">
                         <img src="<?= $row_detail['v_img'];?>" width="100%" height="415"  loading="lazy" alt="">
@@ -133,6 +141,17 @@
             </div>
             
             <div class="col-md-3">
+                <div class="card" style="border:0px;">
+                    <div class="card-header" style="background:#3d3d3d;color:white;border:0px;"> <i class="fas fa-info"></i> ข้อมูล</div>
+                    <div class="card-body" style="background:#545454;">
+                        คะแนน : <span class="imdb"> <i class="fa fa-star" ></i> <?= $row_detail['v_imdb'];?> </span>
+                        <br>
+                        เสียง :  <span class="badge badge-primary"> <?= $row_detail['v_type'];?> </span>
+                        <br>
+                        จำนวนคนดู : <span class="badge badge-danger"> <?= number_format($row_detail['v_view']);?> </span>
+                    </div>
+                </div>
+                <br>
                 <div class="card" style="border:0px;">
                     <div class="card-header" style="background:#3d3d3d;color:white;border:0px;"> <i class="fab fa-facebook-f"></i> แฟนเพจ</div>
                     <div class="card-body" style="background:#545454;padding:0px;">

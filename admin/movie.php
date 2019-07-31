@@ -336,13 +336,25 @@
                         ?>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <a href="https://www.themoviedb.org/movie">> TMD_ID :</a>
-                                    <br><br>
-                                    <input type="text" name="TMD_ID" id="TMD_ID" class="form-control" placeholder="Ex. 447404" required>
-                                    <br>
-                                    <button id="start" class="btn btn-danger"> Start.. </button>
+                                    <div class="box" style="padding:15px;background:white;color:#363636;border-radius:3px;">
+                                        <a href="https://www.themoviedb.org/movie">> TMD_ID :</a>
+                                        <br><br>
+                                        <input type="text" name="TMD_ID" id="TMD_ID" class="form-control" placeholder="Ex. 447404" required>
+                                        <br>
+                                        <button id="start" class="btn btn-danger"> Start.. </button>
+                                    </div>
                                 </div>
                             </div>
+                            <br>
+                            <div class="box" style="padding:15px;background:white;color:#363636;border-radius:3px;">
+                                <h1>New Movie</h1>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" placeholder="ชื่อหนัง...">
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>                            
                         <?php
                     }
                 ?>
