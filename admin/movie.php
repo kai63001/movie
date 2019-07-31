@@ -508,7 +508,7 @@
                                         <br><br>
                                         <input type="text" class="form-control" name="name" id="name" placeholder="Ex. ROBIN HOOD (2018) พยัคฆ์ร้ายโรบินฮู้ด">
                                         <br>
-                                        <button id="namemovie" class="btn btn-primary"> Search.. </button>
+                                        <button id="namemovie" class="btn btn-primary"> Start.. </button>
                                         <script>
                                             $('#namemovie').click(function(){
                                                 namemovie = $('#name').val();
@@ -519,7 +519,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="box" style="padding:15px;background:white;color:#363636;border-radius:3px;">
-                                        <a href="https://www.themoviedb.org/movie">> TMD_ID :</a>
+                                        <a href="https://www.themoviedb.org/movie" target="_blank">> TMD_ID :</a>
                                         <br><br>
                                         <input type="text" name="TMD_ID" id="TMD_ID" class="form-control" placeholder="Ex. 447404" required>
                                         <br>

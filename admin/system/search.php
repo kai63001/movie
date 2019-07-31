@@ -1,5 +1,6 @@
 <?php
     require('../../condb.php');
+    error_reporting(0);
     $name = mysqli_real_escape_string($condb,$_GET['name']);
     $name = str_replace(' ','+',$name);
     $name = str_replace('!','',$name);
@@ -12,8 +13,13 @@
 
     if($check != ""){
         $name1 = explode(':',$name);
+       
         $numword = strpos($name1[1],'(');
         $name1[1] = substr($name1[1],0,$numword);
+        if($name1[1] == ""){
+          $name_1 = explode('(',$name);
+          $name1[1] = $name_1[0];
+        }
         $search = file_get_contents('https://xn--72czp7a9bc4b9c4e6b.com/?s='.$name1[1].'&post_type=post');
         $check = strpos($search,'Nothing Found');
         if($check != ""){
@@ -65,6 +71,10 @@
         $numword2 = strpos($name2[1],'(');
         $name2[1] = substr($name2[1],0,$numword2);
 
+        if($name2[1] == ""){
+          $name_2 = explode('(',$name);
+          $name2[1] = $name_2[0];
+        }
         $searchimovie = file_get_contents('https://www.imovie-hd.com/?s='.$name2[1]);
         
         $check = strpos($search,'Nothing Found');
@@ -128,7 +138,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Searching..</title>
     <style>
         html,body{
             width:100%;
@@ -148,14 +158,32 @@
         </button>
       </div>
       <div class="modal-body">
-        Iframe 1 : <a href="../playerone.php?url=<?= $movie;?>" target="_blank">ดูตัวอย่าง</a>
-        <input type="text" class="form-control" value="<?= htmlentities($player);?>">
-
-        Iframe 2 : <a href="../playerone.php?url=<?= $encode_iframe2;?>" target="_blank">ดูตัวอย่าง</a>
-        <input type="text" class="form-control" value="<?= htmlentities($iframemovie_2);?>">
         
-        Iframe 3 (Fembed) : <a href="../playerone.php?url=<?= $encode_iframe3;?>" target="_blank">ดูตัวอย่าง</a>
-        <input type="text" class="form-control" value="<?= htmlentities($iframemovie_3);?>">
+        <?php 
+          if($movie != ""){
+            ?>
+              Iframe 1 : <a href="../playerone.php?url=<?= $movie;?>" target="_blank">ดูตัวอย่าง</a>
+              <input type="text" class="form-control" value="<?= htmlentities($player);?>">
+            <?php
+          }
+
+          if($encode_iframe2 != ""){
+            ?>
+              Iframe 2 : <a href="../playerone.php?url=<?= $encode_iframe2;?>" target="_blank">ดูตัวอย่าง</a>
+              <input type="text" class="form-control" value="<?= htmlentities($iframemovie_2);?>">
+            <?php
+          }
+
+          if($encode_iframe3 != ""){
+            ?>
+              Iframe 3 (Fembed) : <a href="../playerone.php?url=<?= $encode_iframe3;?>" target="_blank">ดูตัวอย่าง</a>
+              <input type="text" class="form-control" value="<?= htmlentities($iframemovie_3);?>">
+            <?php
+          }
+        ?>
+       
+        
+        
 
       </div>
       <div class="modal-footer">
