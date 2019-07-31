@@ -291,7 +291,7 @@
                             )";
                             $query_backup = mysqli_query($condb,$insert_backup);
                             if($insert_backup){
-                                
+                                header('location:movie.php?ai=successaddmovie&v_id='.$v_id);
                             }else{
                                 echo "error";
                             }
