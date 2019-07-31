@@ -174,9 +174,12 @@
                                                 $count = count($response['genres']);
                                                 $count -= 1;
                                                 for($i=0;$i<=$count;$i++){
-                                                    echo $response['genres'][$i]['name'].",";
+                                                    $ttg .= $response['genres'][$i]['name'].",";
                                                     
                                                 }
+                                                $countttg = strlen($ttg)-1;
+                                                $ttg = substr($ttg,0,$countttg);
+                                                echo $ttg;
                                             ?>">
                                     </div>
                                 </div>

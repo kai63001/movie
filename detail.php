@@ -2,6 +2,9 @@
 
     require('condb.php');
 
+    session_start();
+    
+
     $v_id = mysqli_real_escape_string($condb,$_GET['v_id']);
     $row_detail = mysqli_fetch_array(mysqli_query($condb,"SELECT * FROM video WHERE v_id = '$v_id'"));
 
@@ -148,7 +151,21 @@
                         <br>
                         เสียง :  <span class="badge badge-primary"> <?= $row_detail['v_type'];?> </span>
                         <br>
-                        จำนวนคนดู : <span class="badge badge-danger"> <?= number_format($row_detail['v_view']);?> </span>
+                        จำนวนวิว : <span class="badge badge-danger"> <?= number_format($row_detail['v_view']);?> </span>
+                        <br>
+                        ระยะเวลา : <span class="badge badge-dark"> <?= $row_detail['v_runtime'];?> นาที </span>
+                        <br>
+                        แท็ก :
+                        <br>
+                        <?php
+                            $tags = explode(',',$row_detail['v_tags']);
+                            $countleng = count($tags) - 1;
+                            for($i=0;$i<=$countleng;$i++){
+                                ?>
+                                    <span class="badge badge-danger"> <?= $tags[$i];?> </span>
+                                <?php
+                            }
+                        ?>
                     </div>
                 </div>
                 <br>
