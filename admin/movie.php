@@ -536,7 +536,28 @@
                                     </div>
                                 </div>
                                 <hr>
-                            </div>                            
+                               <div class="row">
+                                    <?php
+                                        $new_movie = mysqli_query($condb,"SELECT * FROM video ORDER BY v_date DESC LIMIT 7");
+                                        while($row_new = mysqli_fetch_array($new_movie)){
+                                            ?>
+                                                <div class="col-md-2" style="margin-bottom:15px;"><img src="<?= $row_new['v_img'];?>" width="100%" loading="lazy" height="200px" alt=""></div>
+                                                <div class="col-md-8" style="margin-bottom:15px;">
+                                                    <b><?= $row_new['v_name'];?></b>
+                                                    <br/>
+                                                    <?= substr($row_new['v_detail'],0,800);?>
+                                                </div>
+                                                <div class="col-md-2" style="margin-bottom:15px;">
+                                                    <button class="btn btn-success"> <i class="fas fa-edit"></i> </button>
+                                                    <button class="btn btn-danger"> <i class="far fa-trash-alt"></i> </button>
+                                                </div>
+                                                
+                                            <?php
+                                        }
+                                    ?>
+                               </div>
+                            </div>   
+                            <br>                         
                         <?php
                     }
                 ?>
