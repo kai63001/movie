@@ -3,7 +3,7 @@
     require('condb.php');
 
     session_start();
-    
+
 
     $v_id = mysqli_real_escape_string($condb,$_GET['v_id']);
     $row_detail = mysqli_fetch_array(mysqli_query($condb,"SELECT * FROM video WHERE v_id = '$v_id'"));
@@ -139,7 +139,13 @@
                 <!-- close iframe -->
                 <br>
                 <!-- open comment -->
-
+                <div class="card" style="border:0px;">
+                    <div class="card-header" style="background:#3d3d3d;color:white;border:0px;"> <i class="fas fa-comment"></i> ความคิดเห็น</div>
+                    <div class="card-body" style="background:#545454;">
+                        <div class="fb-comments" data-href="<?=$_SERVER['SERVER_NAME'];?><?=$_SERVER['REQUEST_URI'];?>" data-width="100%" data-numposts="10"></div>
+                    </div>
+                </div>
+                    
                 <!-- close comment -->
             </div>
             
