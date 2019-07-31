@@ -228,7 +228,7 @@
                                 
                             </form>
                             <br>
-                            <button class="btn btn-danger" id="searchmovie"> Search file movie.. </button>
+                            <button class="btn btn-danger" id="searchmovie"> Search file movie..[BETA] </button>
                             <span id="dumpsearch" style="color:black;"></span>
                             <script>
                                 $('#searchmovie').click(function(){
@@ -239,7 +239,7 @@
                                     SearchXML.onreadystatechange = function(){
                                         if(SearchXML.readyState == 4){
                                             $('#dumpsearch').html(this.responseText);
-                                            $('#searchmovie').text('Search file movie..');
+                                            $('#searchmovie').text('Search file movie..[BETA]');
 
                                         }
                                     };
@@ -311,7 +311,7 @@
                                     <br>
                                 </form>
                                 <br>
-                                <button class="btn btn-danger" id="searchmovie"> Search file movie.. </button>
+                                <button class="btn btn-danger" id="searchmovie"> Search file movie..[BETA] </button>
                                 <span id="dumpsearch" style="color:black;"></span>
                                 <script>
                                     $('#searchmovie').click(function(){
@@ -322,7 +322,7 @@
                                         SearchXML.onreadystatechange = function(){
                                             if(SearchXML.readyState == 4){
                                                 $('#dumpsearch').html(this.responseText);
-                                                $('#searchmovie').text('Search file movie..');
+                                                $('#searchmovie').text('Search file movie..[BETA]');
 
                                             }
                                         };

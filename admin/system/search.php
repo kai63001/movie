@@ -1,14 +1,10 @@
 <?php
-    error_reporting(0);
     require('../../condb.php');
     $name = mysqli_real_escape_string($condb,$_GET['name']);
     $name = str_replace(' ','+',$name);
     $name = str_replace('!','',$name);
     
-    $regex = '/[a-9\ ]/';
-    $data_eng = preg_replace($regex, '', $name);
-    $data_expert = mb_strimwidth($data_eng,0,250,"", "UTF-8");
-    echo $data_expert;
+   
     
     $search = file_get_contents('https://xn--72czp7a9bc4b9c4e6b.com/?s='.$name.'&post_type=post');
 
@@ -16,6 +12,8 @@
 
     if($check != ""){
         $name1 = explode(':',$name);
+        $numword = strpos($name1[1],'(');
+        $name1[1] = substr($name1[1],0,$numword);
         $search = file_get_contents('https://xn--72czp7a9bc4b9c4e6b.com/?s='.$name1[1].'&post_type=post');
         $check = strpos($search,'Nothing Found');
         if($check != ""){
@@ -63,15 +61,18 @@
     $check2 = strpos($searchimovie,'Nothing Found');
 
     if($check2 != ""){
-        $name2 = explode(')',$name);
-        $search = file_get_contents('https://www.imovie-hd.com/?s='.$name2[1]);
+        $name2 = explode(':',$name);
+        $numword2 = strpos($name2[1],'(');
+        $name2[1] = substr($name2[1],0,$numword2);
+
+        $searchimovie = file_get_contents('https://www.imovie-hd.com/?s='.$name2[1]);
+        
         $check = strpos($search,'Nothing Found');
         if($check != ""){
             echo "Nothing Found";
-           
-
 
         }else{
+
             $start = strpos($searchimovie,'class="entry-title"><a href="');
             $searchimovie = substr($searchimovie,$start);
             $searchimovie = str_replace('class="entry-title"><a href="','',$searchimovie);
