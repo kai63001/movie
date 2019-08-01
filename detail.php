@@ -180,7 +180,7 @@
                     <div class="card-body" style="background:#545454;padding:0px;">
                         <div id="fb-root"></div>
                         <script async defer crossorigin="anonymous" src="https://connect.facebook.net/th_TH/sdk.js#xfbml=1&version=v3.3&appId=153313228407799&autoLogAppEvents=1"></script>
-                        <div class="fb-page" data-href="https://www.facebook.com/AnimeHQ05/" data-tabs="timeline" data-width="" data-height="" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/AnimeHQ05/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/AnimeHQ05/">Anime-HQ</a></blockquote></div>
+                        <div class="fb-page" data-href="https://www.facebook.com/AnimeHQ05/" data-tabs="timeline" data-width="" data-height="430px" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/AnimeHQ05/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/AnimeHQ05/">Anime-HQ</a></blockquote></div>
                     </div>
                 </div>
             </div>
