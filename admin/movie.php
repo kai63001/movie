@@ -502,9 +502,172 @@
                             </form>
                         <?php
                         
-                    }else{
-                        
+                    }elseif($ai == 'edit'){
+                        $v_id = mysqli_real_escape_string($condb,$_GET['v_id']);
+
+                        $row_video = mysqli_fetch_array(mysqli_query($condb,"SELECT * FROM video WHERE v_id = '$v_id'"));
+
+                        $editmovie = mysqli_real_escape_string($condb,$_POST['editmovie']);
+                        $v_name = mysqli_real_escape_string($condb,$_POST['v_name']);
+                        $v_detail = mysqli_real_escape_string($condb,$_POST['v_detail']);
+                        $v_img = mysqli_real_escape_string($condb,$_POST['v_img']);
+                        $v_imdb = mysqli_real_escape_string($condb,$_POST['v_imdb']);
+                        $v_tags = mysqli_real_escape_string($condb,$_POST['v_tags']);
+                        $v_trailer = mysqli_real_escape_string($condb,$_POST['v_trailer']);
+                        $v_runtime = mysqli_real_escape_string($condb,$_POST['v_runtime']);
+                        $v_type = mysqli_real_escape_string($condb,$_POST['v_type']);
+
+                        if($editmovie){
+                            $update_video = mysqli_query($condb,"UPDATE video SET 
+                                v_name = '$v_name',
+                                v_detail = '$v_detail',
+                                v_img = '$v_img',
+                                v_imdb = '$v_imdb',
+                                v_tags = '$v_tags',
+                                v_trailer = '$v_trailer',
+                                v_runtime = '$v_runtime',
+                                v_type = '$v_type',
+                                v_date = NOW() WHERE v_id = '$v_id'
+                            ");
+                            $_SESSION['success'] = 'success';
+                            header('location:movie.php');
+                        }
                         ?>
+                            <form action="" method="POST">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        ชื่อเรื่อง :
+                                        <input type="text" name="v_name" class="form-control" value="<?=$row_video['v_name'];?>" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        ประเภท :
+                                        <select name="v_type" id="" class="form-control">
+                                            <option value="พากย์ไทย">พากย์ไทย</option>
+                                            <option value="ซับไทย">ซับไทย</option>
+                                            <option value="เสียงโรง">เสียงโรง</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                เรื่องย่อ :
+                                <textarea name="v_detail" id="" name="v_detail" cols="10" rows="5" class="form-control"><?=$row_video['v_detail'];?></textarea>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        รูปปก :
+                                        <input type="text" name="v_img" class="form-control" value="<?=$row_video['v_img'];?>">
+                                    </div>
+                                    <div class="col-md-4">
+                                        คะแนน IMDb :
+                                        <input type="text" name="v_imdb" class="form-control" value="<?=$row_video['v_imdb'];?>">
+                                    </div>
+                                    <div class="col-md-4">
+                                        แท็ก :
+                                        <input type="text" name="v_tags" class="form-control" value="<?php
+                                               echo $row_video['v_tags'];
+                                            ?>">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <a href="https://www.youtube.com/watch?v=<?= $row_video['v_trailer'];?>" target="_blank">ตัวอย่าง</a> หนัง : 
+                                        <input type="text" name="v_trailer" class="form-control" value="<?= $row_video['v_trailer'];?>" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        ความยาวของหนัง (นาที) :
+                                        <input type="text" name="v_runtime" class="form-control" value="<?=$row_video['v_runtime'];?>">
+                                    </div>
+                                </div>
+                                <br>
+                                <input type="submit" name="editmovie" class="btn btn-success" value="EDIT MOVIE..">
+                                <a href="movie.php?ai=editiframe&v_id=<?=$row_video['v_id'];?>" style="float:right;" class="btn btn-danger"> EDIT IFRAME.. </a>
+                            </form>
+                        <?php
+                        
+                    }elseif($ai == 'editiframe'){
+                        $v_id = mysqli_real_escape_string($condb,$_GET['v_id']);
+
+                        $row_iframe1 = mysqli_fetch_array(mysqli_query($condb,"SELECT * FROM movie WHERE movie_vid = '$v_id'"));
+                        $movie_iframe = mysqli_real_escape_string($condb,$_POST['movie_iframe']);
+
+                        if($movie_iframe){
+                            $update_iframe1 = mysqli_query($condb,"UPDATE movie SET movie_iframe = '$movie_iframe' WHERE movie_vid = '$v_id'");
+                            $_SESSION['success'] = 'success';
+                            header('location:movie.php');
+                        }
+                        ?>
+                            <form action="" method="POST">
+                                Iframe 1 :
+                                <br/>
+                                <textarea name="movie_iframe" id="" cols="30" rows="5" class="form-control"><?=$row_iframe1['movie_iframe'];?></textarea>
+                                <br/>
+                                <input type="submit" class="btn btn-success" value="Edit..">
+                            </form><br/>
+                            <button id="showbackup" class="btn btn-primary"> Show Backup Movie </button>
+                            <br>
+                            <div id="backup">
+                            <br>
+                                <div class="row">
+                                    <?php
+                                        $backupmovie = mysqli_query($condb,"SELECT * FROM movie_backup WHERE mb_vid = '$v_id'");
+
+                                        while($row_backupmovie = mysqli_fetch_array($backupmovie)){
+                                            ?> 
+
+                                                <div class="col-md-3">
+                                                    <a href="movie.php?ai=editiframebackup&mb_id=<?=$row_backupmovie['mb_id'];?>" style="text-decoration:none;color:white;">
+                                                        <div style="background:#0c053b;border-radius:3px;padding:25px;"><center><?= $row_backupmovie['mb_name'];?></center></div>
+                                                    </a>
+                                                </div>
+                                                
+                                            <?php
+                                        }
+
+                                    ?>
+                                </div>
+                            </div>
+                            <script>
+                                $('#backup').hide();
+                                $('#showbackup').click(function(){
+                                    $('#backup').toggle('slow');
+                                });
+                            </script>
+                        <?php
+                        
+                    }elseif($ai == 'editiframebackup'){
+                        $mb_id = mysqli_real_escape_string($condb,$_GET['mb_id']);
+                        $movie_backup = mysqli_fetch_array(mysqli_query($condb,"SELECT * FROM movie_backup WHERE mb_id = '$mb_id'"));
+                    
+                        $mb_name = mysqli_real_escape_string($condb,$_POST['mb_name']);
+                        $mb_iframe = mysqli_real_escape_string($condb,$_POST['mb_iframe']);
+
+                        if($mb_iframe){
+                            $edit_backup = mysqli_query($condb,"UPDATE movie_backup SET mb_name = '$mb_name', mb_iframe = '$mb_iframe' WHERE mb_id = '$mb_id'");
+                            $_SESSION['success'] = 'success';
+                            header('location:movie.php');
+                        }
+                        ?>
+                            <form action="" method="POST">
+                                Name : 
+                                <input type="text" name="mb_name" class="form-control" id="" value="<?= $movie_backup['mb_name'];?>">
+                                Iframe :
+                                <textarea name="mb_iframe" id="" cols="30" rows="5" class="form-control"><?= $movie_backup['mb_iframe'];?></textarea>
+                                <br>
+                                <input type="submit" class="btn btn-success" value="Edit..">
+                            </form>
+                        <?php
+                    }else{
+                        if($_SESSION['success']){
+                            ?>
+                                <script>
+                                    Swal.fire(
+                                        'Success',
+                                        'Update Success',
+                                        'success'
+                                    )
+                                </script>
+                            <?php
+                        }unset($_SESSION['success']);
+                        ?>
+                            
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="box" style="padding:15px;background:white;color:#363636;border-radius:3px;">

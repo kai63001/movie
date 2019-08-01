@@ -24,7 +24,7 @@
                         <?= substr($row_new['v_detail'],0,800);?>
                     </div>
                     <div class="col-md-2" style="margin-bottom:15px;">
-                        <button class="btn btn-success"> <i class="fas fa-edit"></i> </button>
+                        <a class="btn btn-success" href="movie.php?ai=edit&v_id=<?= $row_new['v_id'];?>" style="text-decoration:none;color:white;"> <i class="fas fa-edit"></i> </a>
                         <button class="btn btn-danger" id="delete-<?=$row_new['v_id'];?>"> <i class="far fa-trash-alt"></i> </button>
                         <script>
                             $('#delete-<?=$row_new['v_id'];?>').click(function(){
