@@ -23,6 +23,7 @@
     <link href="https://fonts.googleapis.com/css?family=Concert+One&display=swap" rel="stylesheet"> -->
     <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Kanit&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 
     <style>
         html,body{
@@ -549,7 +550,38 @@
                                                 </div>
                                                 <div class="col-md-2" style="margin-bottom:15px;">
                                                     <button class="btn btn-success"> <i class="fas fa-edit"></i> </button>
-                                                    <button class="btn btn-danger"> <i class="far fa-trash-alt"></i> </button>
+                                                    <button class="btn btn-danger" id="delete-<?=$row_new['v_id'];?>"> <i class="far fa-trash-alt"></i> </button>
+                                                    <script>
+                                                        $('#delete-<?=$row_new['v_id'];?>').click(function(){
+                                                            Swal.fire({
+                                                            title: 'แน่ใจหลอ',
+                                                            text: "คุณแน่ในที่จะลบหลังเรื่องนี้",
+                                                            type: 'warning',
+                                                            showCancelButton: true,
+                                                            confirmButtonColor: '#3085d6',
+                                                            cancelButtonColor: '#d33',
+                                                            confirmButtonText: 'ลบเลย',
+                                                            cancelButtonText: 'ยังก่อน'
+
+                                                            }).then((result) => {
+                                                                
+                                                                if (result.value) {
+                                                                    var XMLDelete = new XMLHttpRequest();
+                                                                    XMLDelete.open('POST','system/delete_movie.php?v_id=<?=$row_new['v_id'];?>',true);
+                                                                    XMLDelete.send();
+                                                                    Swal.fire(
+                                                                        
+                                                                    'ลบแล้ว!',
+                                                                    'ไฟล์หลังของคุณได้ถูกลบลงแล้ว',
+                                                                    'success'
+                                                                    )
+                                                                    
+                                                                }
+                                                                
+                                                                
+                                                            })
+                                                        });
+                                                    </script>
                                                 </div>
                                                 
                                             <?php
