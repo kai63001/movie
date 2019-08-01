@@ -5,6 +5,7 @@
     error_reporting(0);
     if(!$_SESSION['a_id']){
         header('location:login.php');
+        exit();
     }
     
     $ai = mysqli_real_escape_string($condb,$_GET['ai']);
@@ -262,6 +263,8 @@
                                     </div>
                                     <div class="col-md-9">
                                         <h4><?= $movie['v_name'];?></h4>
+                                        <?= substr($movie['v_detail'],0,800);?>
+                                        <br>
                                         <br>
                                         <a href="movie.php" class="btn btn-info">เพิ่มหนังใหม่</a>
                                         <a href="movie.php?ai=addbackup&v_id=<?= $v_id;?>" class="btn btn-primary">เพิ่มตอนสำรอง</a>
@@ -533,61 +536,40 @@
                                 <h1>New Movie</h1>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <input type="text" class="form-control" placeholder="ชื่อหนัง...">
+                                        <input type="text" class="form-control namemovie" name="namemovie" id="namemovie" placeholder="ชื่อหนัง...">
                                     </div>
                                 </div>
                                 <hr>
-                               <div class="row">
-                                    <?php
-                                        $new_movie = mysqli_query($condb,"SELECT * FROM video ORDER BY v_date DESC LIMIT 7");
-                                        while($row_new = mysqli_fetch_array($new_movie)){
-                                            ?>
-                                                <div class="col-md-2" style="margin-bottom:15px;"><img src="<?= $row_new['v_img'];?>" width="100%" loading="lazy" height="200px" alt=""></div>
-                                                <div class="col-md-8" style="margin-bottom:15px;">
-                                                    <b><?= $row_new['v_name'];?></b>
-                                                    <br/>
-                                                    <?= substr($row_new['v_detail'],0,800);?>
-                                                </div>
-                                                <div class="col-md-2" style="margin-bottom:15px;">
-                                                    <button class="btn btn-success"> <i class="fas fa-edit"></i> </button>
-                                                    <button class="btn btn-danger" id="delete-<?=$row_new['v_id'];?>"> <i class="far fa-trash-alt"></i> </button>
-                                                    <script>
-                                                        $('#delete-<?=$row_new['v_id'];?>').click(function(){
-                                                            Swal.fire({
-                                                            title: 'แน่ใจหลอ',
-                                                            text: "คุณแน่ในที่จะลบหลังเรื่องนี้",
-                                                            type: 'warning',
-                                                            showCancelButton: true,
-                                                            confirmButtonColor: '#3085d6',
-                                                            cancelButtonColor: '#d33',
-                                                            confirmButtonText: 'ลบเลย',
-                                                            cancelButtonText: 'ยังก่อน'
+                                    <span id="listmovie"></span>
+                                    <span id="listmovie2"></span>
 
-                                                            }).then((result) => {
-                                                                
-                                                                if (result.value) {
-                                                                    var XMLDelete = new XMLHttpRequest();
-                                                                    XMLDelete.open('POST','system/delete_movie.php?v_id=<?=$row_new['v_id'];?>',true);
-                                                                    XMLDelete.send();
-                                                                    Swal.fire(
-                                                                        
-                                                                    'ลบแล้ว!',
-                                                                    'ไฟล์หลังของคุณได้ถูกลบลงแล้ว',
-                                                                    'success'
-                                                                    )
-                                                                    
-                                                                }
-                                                                
-                                                                
-                                                            })
-                                                        });
-                                                    </script>
-                                                </div>
-                                                
-                                            <?php
+                                    <script>
+                                    $(document).ready(function(){
+                                        $("input.namemovie").keyup(function(){
+                                                var that = this,
+                                                value = $(this).val();
+                                                $('#listmovie2').hide();
+                                                var XMLListMoive = new XMLHttpRequest();
+                                                XMLListMoive.open('POST','ajax/_list_movie.php?namemovie='+value,true);
+                                                XMLListMoive.send();
+                                                XMLListMoive.onreadystatechange = function(){
+                                                    if(XMLListMoive.readyState == 4){
+                                                        $('#listmovie').html(this.responseText);
+                                                    }
+                                                };
+                                        });
+                                    });
+                                    var XMLMovie = new XMLHttpRequest();
+                                    XMLMovie.open('POST','ajax/_list_movie.php',true);
+                                    XMLMovie.send();
+                                    XMLMovie.onreadystatechange = function(){
+                                        if(XMLMovie.readyState == 4){
+                                            $('#listmovie2').html(this.responseText);
                                         }
-                                    ?>
-                               </div>
+                                    };
+                                     
+                                        
+                                    </script>
                             </div>   
                             <br>                         
                         <?php
