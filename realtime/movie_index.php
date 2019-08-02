@@ -1,8 +1,9 @@
 <?php
 
     require('../condb.php');
-
-    $movie = mysqli_query($condb,"SELECT * FROM video ORDER BY v_date DESC LIMIT 24 ");
+    $num = mysqli_real_escape_string($condb,$_GET['num']);
+    $limit = $num * 24;
+    $movie = mysqli_query($condb,"SELECT * FROM video ORDER BY v_date DESC LIMIT $limit ");
 
     while($row_movie = mysqli_fetch_array($movie)){
         ?>
@@ -13,6 +14,8 @@
                         <p style=""><?= $row_movie['v_name'];?></p>
                         <p style="margin-top:-16px;color:#e3e3e3;"><?= $row_movie['v_tags'];?></p>
                         <span class="imdb"> <i class="fa fa-star" ></i> <?= $row_movie['v_imdb'];?> </span>
+                        <span class="type"> <i class="fa fa-star" ></i> <?= $row_movie['v_type'];?> </span>
+
                     </div>
                 </a>
             </div>

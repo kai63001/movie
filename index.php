@@ -45,6 +45,17 @@
             border-radius:5px;
             color:#FFD700;
         }
+        .type {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            background: #4a4a4a;
+            padding-left:5px;
+            padding-right:5px;
+            font-size:10px;
+            border-radius:5px;
+            color:#ff7817;
+        }
     </style>
 </head>
 <body>
@@ -58,16 +69,29 @@
         <div class="row" id="realmovie">
             <!--inside movie -->
         </div>
+        <br/>
+        <?php
+            $count_video = mysqli_num_rows(mysqli_query($condb,"SELECT * FROM video"));
+            if($count_video > 24){
+                ?>
+                    <button class="btn btn-outline-danger btn-block" id="loadmore"> Load More.. </button>
+                <?php
+            }
+        ?>
     </div>
     <!-- ปิด list movie -->
-
+        
     <script>
-
-        setInterval("movie()",1000);
-
+        num = 1;
+       
+        setInterval("movie()",2000);
+        
         function movie(){
+            $('#loadmore').click(function(){
+                num += 1;
+            });
             var XMLMovie = new XMLHttpRequest();
-            XMLMovie.open('POST','realtime/movie_index.php',true);
+            XMLMovie.open('POST','realtime/movie_index.php?num='+num,true);
             XMLMovie.send();
             XMLMovie.onreadystatechange = function(){
                 if(XMLMovie.readyState ==  3){
