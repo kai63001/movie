@@ -65,7 +65,6 @@
     
     $searchimovie = file_get_contents('https://www.imovie-hd.com/?s='.$name);
     $check2 = strpos($searchimovie,'Nothing Found');
-
     if($check2 != ""){
         $name2 = explode(':',$name);
         $numword2 = strpos($name2[1],'(');
@@ -100,25 +99,36 @@
     }
 
     $movie_doo4k = file_get_contents($searchimovie);
-
+    
     $start = strpos($movie_doo4k,'$.getJSON( "');
     $movie_doo4k = substr($movie_doo4k,$start);
     $movie_doo4k = str_replace('$.getJSON( "','',$movie_doo4k);
     $stop = strpos($movie_doo4k,'&bg');
     $movie_doo4k = substr($movie_doo4k,0,$stop);
-    $movie_doo4k = 'https://www.imovie-hd.com'.$movie_doo4k;
-    $getfilemovie = file_get_contents($movie_doo4k);
-    $getfilemovie = trim($getfilemovie);
 
+    
+    $movie_doo4k = 'https://www.imovie-hd.com'.$movie_doo4k;
+    $getfilemovie = curlimovie($movie_doo4k);
+    function curlimovie($url) {
+        $ch = curl_init(); 
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_REFERER, 'https://www.imovie-hd.com/');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
+        $data = curl_exec($ch); 
+        curl_close($ch); 
+        return $data;   
+    }
+    
+    $getfilemovie = trim($getfilemovie);
     $getfilemovie = json_decode(json_encode($getfilemovie),True);
     $getfilemovie = json_decode($getfilemovie,True);
 
-    $encode_iframe2 = base64_encode($getfilemovie['ตัวเล่นหลัก']);
+    $encode_iframe2 = base64_encode($getfilemovie['ตัวเล่นหลักชัด']);
     $encode_iframe2 = str_rot13($encode_iframe2);
 
     $iframemovie_2 = '<iframe height="550px" sandboxscrolling="no" frameborder="0"allowfullscreen="true" webkitallowfullscreen="true"  mozallowfullscreen="true" class="embed-responsive-item" width="100%" src="../playerone.php?url='.$encode_iframe2.'" allowfullscreen></iframe>';
 
-    $encode_iframe3 = base64_encode($getfilemovie['fembed']);
+    $encode_iframe3 = base64_encode($getfilemovie['ตัวเล่นสำรอง']);
     $encode_iframe3 = str_rot13($encode_iframe3);
 
     $iframemovie_3 = '<iframe height="550px" sandboxscrolling="no" frameborder="0"allowfullscreen="true" webkitallowfullscreen="true"  mozallowfullscreen="true" class="embed-responsive-item" width="100%" src="../playerone.php?url='.$encode_iframe3.'" allowfullscreen></iframe>';
@@ -159,21 +169,19 @@
       </div>
       <div class="modal-body">
         
-        <?php 
+      <?php 
           if($movie != ""){
             ?>
               Iframe 1 : <a href="../playerone.php?url=<?= $movie;?>" target="_blank">ดูตัวอย่าง</a>
               <input type="text" class="form-control" value="<?= htmlentities($player);?>">
             <?php
           }
-
           if($encode_iframe2 != ""){
             ?>
               Iframe 2 : <a href="../playerone.php?url=<?= $encode_iframe2;?>" target="_blank">ดูตัวอย่าง</a>
               <input type="text" class="form-control" value="<?= htmlentities($iframemovie_2);?>">
             <?php
           }
-
           if($encode_iframe3 != ""){
             ?>
               Iframe 3 (Fembed) : <a href="../playerone.php?url=<?= $encode_iframe3;?>" target="_blank">ดูตัวอย่าง</a>
@@ -181,7 +189,6 @@
             <?php
           }
         ?>
-       
         
         
 

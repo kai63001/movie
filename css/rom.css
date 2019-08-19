@@ -1,0 +1,127 @@
+.nav{
+    background:#FAF9FE;
+    height:100%;
+    border-right:1px solid #e6e6e6;
+}
+.list {
+    float:left;
+   
+}
+.list:hover i{
+    color: black;
+}
+.content{
+    padding-top:25px;
+    font-family: 'Varela Round','Kanit', sans-serif;
+}
+
+.md-layout .mbsc-scv-item {
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+.md-layout .mbsc-scv-c {
+    margin: 10px 0;
+}
+.mbsc-scv-c{
+    overflow: visible;
+}
+
+.variable-1 {
+    width: 60px;
+    height: 60px;
+}
+
+.variable-2 {
+    width: 80px;
+    height: 80px;
+}
+
+.variable-3 {
+    width: 70px;
+    height: 70px;
+}
+
+.variable-4 {
+    width: 50px;
+    height: 50px;
+}
+
+.variable-5 {
+    width: 100px;
+    height: 100px;
+}
+
+.variable-6 {
+    width: 40px;
+    height: 40px;
+}
+
+.md-fixed .mbsc-scv-item {
+    height: 80px;
+    margin: 0 10px;
+}
+
+.md-variable .mbsc-scv-item {
+    margin: auto 10px;
+}
+
+.md-pages .mbsc-scv-item {
+    height: 80px;
+}
+
+.md-fullpage .mbsc-scv-item {
+    height: 630px;
+}
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background:#FAF9FE;
+    border-right:1px solid #e6e6e6;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+.m_play{
+    margin-top:13%;
+    opacity: 0;
+    transition: .2s;
+    color:white;
+}
+
+.movietop:hover .m_play{
+    opacity: 1;
+}
+.sidenav a {
+padding: 8px 8px 8px 32px;
+text-decoration: none;
+color: #818181;
+display: block;
+transition: 0.3s;
+}
+
+.sidenav a:hover {
+color: #333333;
+}
+
+.sidenav .closebtn {
+position: absolute;
+top: 0;
+right: 25px;
+margin-left: 50px;
+}
+
+#main {
+transition: margin-left .5s;
+padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+.sidenav {padding-top: 15px;}
+.sidenav a {font-size: 18px;}
+}

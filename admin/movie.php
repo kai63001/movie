@@ -17,7 +17,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Movie2D - ADMIN</title>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- <link href="https://fonts.googleapis.com/css?family=Kanit&display=swap" rel="stylesheet">
@@ -103,6 +103,7 @@
                         $v_trailer = mysqli_real_escape_string($condb,$_POST['v_trailer']);
                         $v_runtime = mysqli_real_escape_string($condb,$_POST['v_runtime']);
                         $v_type = mysqli_real_escape_string($condb,$_POST['v_type']);
+                        $v_background = mysqli_real_escape_string($condb,$_POST['v_background']);
                         $oname = $response['original_title'];
                         if($addmovie){
                             $insert_movie = "INSERT INTO video (
@@ -195,6 +196,8 @@
                                         <input type="text" name="v_runtime" class="form-control" value="<?=$response['runtime'];?>">
                                     </div>
                                 </div>
+                                พื้นหลัง :
+                                <input type="text" class="form-control" name="v_background" value="https://image.tmdb.org/t/p/w1280<?=$response['backdrop_path'];?>">
                                 <br>
                                 <input type="submit" name="addmovie" class="btn btn-success" value="ADD MOVIE..">
                             </form>
@@ -397,7 +400,6 @@
                         $youtube = substr($youtube,0,$stop);
 
                         //
-
                         $addmovie = mysqli_real_escape_string($condb,$_POST['addmovie']);
                         $v_name = mysqli_real_escape_string($condb,$_POST['v_name']);
                         $v_detail = mysqli_real_escape_string($condb,$_POST['v_detail']);
@@ -407,12 +409,15 @@
                         $v_trailer = mysqli_real_escape_string($condb,$_POST['v_trailer']);
                         $v_runtime = mysqli_real_escape_string($condb,$_POST['v_runtime']);
                         $v_type = mysqli_real_escape_string($condb,$_POST['v_type']);
+                        $v_background = mysqli_real_escape_string($condb,$_POST['v_background']);
+                        $oname = $response['original_title'];
                         if($addmovie){
                             $insert_movie = "INSERT INTO video (
                                 v_name,
                                 v_oname,
                                 v_detail,
                                 v_img,
+                                v_background,
                                 v_movie,
                                 v_imdb,
                                 v_tags,
@@ -426,6 +431,7 @@
                                 '$oname',
                                 '$v_detail',
                                 '$v_img',
+                                '$v_background',
                                 '1',
                                 '$v_imdb',
                                 '$v_tags',
@@ -497,6 +503,8 @@
                                         <input type="text" name="v_runtime" class="form-control" value="<?=$response['runtime'];?>">
                                     </div>
                                 </div>
+                                พื้นหลัง :
+                                <input type="text" class="form-control" name="v_background" value="https://image.tmdb.org/t/p/w1280<?=$response['backdrop_path'];?>">
                                 <br>
                                 <input type="submit" name="addmovie" class="btn btn-success" value="ADD MOVIE..">
                             </form>
@@ -590,6 +598,7 @@
 
                         if($movie_iframe){
                             $update_iframe1 = mysqli_query($condb,"UPDATE movie SET movie_iframe = '$movie_iframe' WHERE movie_vid = '$v_id'");
+                            $delete_report = mysqli_query($condb,"DELETE FROM report WHERE r_vid = '$v_id'");
                             $_SESSION['success'] = 'success';
                             header('location:movie.php');
                         }
@@ -608,7 +617,6 @@
                                 <div class="row">
                                     <?php
                                         $backupmovie = mysqli_query($condb,"SELECT * FROM movie_backup WHERE mb_vid = '$v_id'");
-
                                         while($row_backupmovie = mysqli_fetch_array($backupmovie)){
                                             ?> 
 

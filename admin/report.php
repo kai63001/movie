@@ -1,7 +1,6 @@
 <?php
 
     require('../condb.php');
-    error_reporting(0);
     session_start();
 
     if(!$_SESSION['a_id']){
@@ -44,7 +43,37 @@
         <div class="col-md-9" style="background:#3d3d3d;color:white;">
             <div class="container">
                 <br>
-                <h1></h1>
+                <h1>Report</h1>
+                <div class="box" style="padding:15px;background:white;color:#363636;border-radius:3px;">
+                    All Report
+                    <br>
+                    <hr>
+                    <div class="row">
+                        <?php
+                            $report = mysqli_query($condb,"SELECT * FROM report");
+
+                            while($row_report = mysqli_fetch_array($report)){
+                                $r_vid = $row_report['r_vid'];
+                                $video_report = mysqli_fetch_array(mysqli_query($condb,"SELECT * FROM video WHERE v_id = '$r_vid'"));
+                                
+                                ?>
+                                    <div class="col-md-2">
+                                        <img src="<?=$video_report['v_img'];?>" width="100%" loading="lazy" alt="">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <?= $video_report['v_name'];?>
+                                        <br>
+                                        <?= substr($video_report['v_detail'],0,800);?>
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a href="movie.php?ai=edit&v_id=<?= $video_report['v_id'];?>" class="btn btn-success"><i class="fas fa-edit"></i></a>
+                                    </div>
+                                <?php
+                            }
+                        ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
